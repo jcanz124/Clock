@@ -9,7 +9,7 @@
       margin: 0;
       background-color: black;
       color: white;
-      font-family: Arial, sans-serif;
+      font-family: "Times New Roman", Times, serif;
       height: 100vh;
       display: flex;
       justify-content: center;
@@ -23,13 +23,14 @@
       margin-bottom: 1em;
     }
     #time {
-      font-size: 9em;
+      font-size: 12em;
       font-weight: bold;
     }
     #date {
-      font-size: 3em;
+      font-size: 5em;
       margin-top: 0.5em;
       color: #ccc;
+      text-transform: uppercase; /* Make the date all capital */
     }
     #fullscreenBtn {
       margin-top: 2em;
@@ -49,7 +50,7 @@
 </head>
 <body>
   <!-- Image slot -->
-  <img src="../Clock/logo/logo.png" alt="Your Logo" id="topImage">
+  <img src="../logo.png" alt="Your Logo" id="topImage">
 
   <!-- Time & Date -->
   <div id="time"></div>
@@ -108,6 +109,13 @@
         console.error(`${err.name}, ${err.message}`);
       }
     }
+
+    // Keep the TV/Screen active by periodically triggering an event
+    setInterval(() => {
+      // This triggers a dummy interaction to prevent sleep every 30 seconds
+      document.body.style.display = 'none'; 
+      document.body.style.display = 'block';
+    }, 30000); // every 30 seconds
 
     requestWakeLock();
 
