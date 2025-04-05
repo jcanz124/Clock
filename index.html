@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Live PH Time & Date</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+    }
+    img {
+      width: 500px;
+      height: auto;
+      margin-bottom: 1em;
+    }
+    #time {
+      font-size: 9em;
+      font-weight: bold;
+    }
+    #date {
+      font-size: 3em;
+      margin-top: 0.5em;
+      color: #ccc;
+    }
+    #fullscreenBtn {
+      margin-top: 2em;
+      padding: 0.5em 1.5em;
+      font-size: 1em;
+      cursor: pointer;
+      background-color: #444;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    #fullscreenBtn:hover {
+      background-color: #666;
+    }
+  </style>
+</head>
+<body>
+  <!-- Image slot -->
+  <img src="../Clock/logo/face.png" alt="Your Logo" id="topImage">
+
+  <!-- Time & Date -->
+  <div id="time"></div>
+  <div id="date"></div>
+
+  <!-- Fullscreen Button -->
+  <button id="fullscreenBtn">Enter Fullscreen</button>
+
+  <script>
+    function updateTimeAndDate() {
+      const timeOptions = {
+        timeZone: 'Asia/Manila',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      };
+      const dateOptions = {
+        timeZone: 'Asia/Manila',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        weekday: 'long'
+      };
+
+      const now = new Date();
+      const time = now.toLocaleTimeString('en-US', timeOptions);
+      const date = now.toLocaleDateString('en-US', dateOptions);
+
+      document.getElementById('time').textContent = time;
+      document.getElementById('date').textContent = date;
+    }
+
+    setInterval(updateTimeAndDate, 1000);
+    updateTimeAndDate();
+
+    // Wake Lock logic
+    let wakeLock = null;
+
+    async function requestWakeLock() {
+      try {
+        if ('wakeLock' in navigator) {
+          wakeLock = await navigator.wakeLock.request('screen');
+          console.log('Wake Lock is active');
+
+          document.addEventListener('visibilitychange', async () => {
+            if (wakeLock !== null && document.visibilityState === 'visible') {
+              wakeLock = await navigator.wakeLock.request('screen');
+              console.log('Wake Lock re-acquired');
+            }
+          });
+        } else {
+          console.warn('Wake Lock API not supported.');
+        }
+      } catch (err) {
+        console.error(`${err.name}, ${err.message}`);
+      }
+    }
+
+    requestWakeLock();
+
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+    fullscreenBtn.addEventListener('click', () => {
+      const elem = document.documentElement;
+
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+      }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      if (document.fullscreenElement) {
+        fullscreenBtn.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
