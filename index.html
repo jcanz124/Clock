@@ -12,35 +12,34 @@
       font-family: "Times New Roman", Times, serif;
       height: 100vh;
       display: flex;
-      justify-content: flex-end; /* Align to the right side */
+      justify-content: flex-start; /* 👈 Stays on the LEFT */
       align-items: center;
     }
 
-    .right-half {
+    .left-half {
       width: 50vw;
-      text-align: right;
+      padding-left: 2rem;
+      text-align: left;
       display: flex;
       flex-direction: column;
-      align-items: flex-end; /* New: Align content inside to right */
-      padding-right: 2rem;
-      overflow: hidden;
+      align-items: flex-start; /* 👈 Align content inside to LEFT */
       box-sizing: border-box;
     }
-    
+
     img {
-      max-width: 100%;  /* New: Prevent overflow */
+      width: 100%;        /* 👈 Fit inside the 50vw */
+      max-width: 700px;   /* 👈 Limit image size */
       height: auto;
       margin-bottom: 1em;
     }
 
-
     #time {
-      font-size: 6em;
+      font-size: 12em;
       font-weight: bold;
     }
 
     #date {
-      font-size: 2.5em;
+      font-size: 5em;
       margin-top: 0.5em;
       color: #ccc;
       text-transform: uppercase;
@@ -65,7 +64,7 @@
 </head>
 <body>
 
-  <div class="right-half">
+  <div class="left-half">
     <img src="logo/logo.png" alt="Your Logo" id="topImage">
     <div id="time"></div>
     <div id="date"></div>
