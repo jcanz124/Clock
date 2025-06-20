@@ -5,89 +5,133 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Live PH Time & Date</title>
   <style>
-    /* —— page setup —— */
-    body{
-      margin:0;
-      background:#000;
-      color:#fff;
-      font-family:"Times New Roman",Times,serif;
-      height:100vh;
-      display:flex;             /* put two halves side‑by‑side */
-      justify-content:flex-start;
-      align-items:center;       /* vertical centring */
+    body {
+      margin: 0;
+      background-color: black;
+      color: white;
+      font-family: "Times New Roman", Times, serif;
+      height: 100vh;
+      display: flex;
+      justify-content: flex-end; /* Align to the right side */
+      align-items: center;
     }
 
-    /* —— left half —— */
-    .left-half{
-      width:50vw;               /* take only half the page */
-      padding-left:2rem;        /* a little breathing room */
-      text-align:left;
+    .right-half {
+      width: 50vw; /* Only take half of the screen */
+      padding-right: 2rem;
+      text-align: right; /* Align text to the right */
     }
 
-    /* —— existing styles, unchanged —— */
-    img{width:700px;height:auto;margin-bottom:1em;}
-    #time{font-size:12em;font-weight:bold;}
-    #date{font-size:5em;margin-top:0.5em;color:#ccc;text-transform:uppercase;}
-    #fullscreenBtn{
-      margin-top:2em;
-      padding:.5em 1.5em;
-      font-size:1em;
-      cursor:pointer;
-      background:#444;
-      color:#fff;
-      border:none;
-      border-radius:5px;
-      transition:background-color .3s ease;
+    img {
+      width: 700px;
+      height: auto;
+      margin-bottom: 1em;
     }
-    #fullscreenBtn:hover{background:#666;}
+
+    #time {
+      font-size: 12em;
+      font-weight: bold;
+    }
+
+    #date {
+      font-size: 5em;
+      margin-top: 0.5em;
+      color: #ccc;
+      text-transform: uppercase;
+    }
+
+    #fullscreenBtn {
+      margin-top: 2em;
+      padding: 0.5em 1.5em;
+      font-size: 1em;
+      cursor: pointer;
+      background-color: #444;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    #fullscreenBtn:hover {
+      background-color: #666;
+    }
   </style>
 </head>
 <body>
 
-  <!-- LEFT HALF -->
-  <div class="left-half">
+  <div class="right-half">
     <img src="logo/logo.png" alt="Your Logo" id="topImage">
     <div id="time"></div>
     <div id="date"></div>
     <button id="fullscreenBtn">Enter Fullscreen</button>
   </div>
 
-  <!-- RIGHT HALF stays empty (black) -->
-
   <script>
-    /* ======== your original JS, unchanged ======== */
-    function updateTimeAndDate(){
-      const timeOptions={timeZone:'Asia/Manila',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true};
-      const dateOptions={timeZone:'Asia/Manila',year:'numeric',month:'long',day:'numeric',weekday:'long'};
-      const now=new Date();
-      document.getElementById('time').textContent=now.toLocaleTimeString('en-US',timeOptions);
-      document.getElementById('date').textContent=now.toLocaleDateString('en-US',dateOptions);
-    }
-    setInterval(updateTimeAndDate,1000);updateTimeAndDate();
+    function updateTimeAndDate() {
+      const timeOptions = {
+        timeZone: 'Asia/Manila',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      };
+      const dateOptions = {
+        timeZone: 'Asia/Manila',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        weekday: 'long'
+      };
 
-    /* Wake‑lock & fullscreen bits exactly as before */
-    let wakeLock=null;
-    async function requestWakeLock(){
-      try{
-        if('wakeLock'in navigator){
-          wakeLock=await navigator.wakeLock.request('screen');
-          document.addEventListener('visibilitychange',async()=>{
-            if(wakeLock!==null&&document.visibilityState==='visible'){
-              wakeLock=await navigator.wakeLock.request('screen');
+      const now = new Date();
+      const time = now.toLocaleTimeString('en-US', timeOptions);
+      const date = now.toLocaleDateString('en-US', dateOptions);
+
+      document.getElementById('time').textContent = time;
+      document.getElementById('date').textContent = date;
+    }
+
+    setInterval(updateTimeAndDate, 1000);
+    updateTimeAndDate();
+
+    let wakeLock = null;
+    async function requestWakeLock() {
+      try {
+        if ('wakeLock' in navigator) {
+          wakeLock = await navigator.wakeLock.request('screen');
+          document.addEventListener('visibilitychange', async () => {
+            if (wakeLock !== null && document.visibilityState === 'visible') {
+              wakeLock = await navigator.wakeLock.request('screen');
             }
           });
         }
-      }catch(err){console.error(err);}
+      } catch (err) {
+        console.error(err);
+      }
     }
-    setInterval(()=>{document.body.style.display='none';document.body.style.display='block';},30000);
+
+    setInterval(() => {
+      document.body.style.display = 'none';
+      document.body.style.display = 'block';
+    }, 30000);
     requestWakeLock();
 
-    document.getElementById('fullscreenBtn').addEventListener('click',()=>{
-      const elem=document.documentElement;
-      (elem.requestFullscreen||elem.webkitRequestFullscreen||elem.msRequestFullscreen).call(elem);
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    fullscreenBtn.addEventListener('click', () => {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+      }
     });
-    document.addEventListener('fullscreenchange',()=>{
-      if(document.fullscreenElement){document.getElementById('fullscreenBtn').style.display='none';}
+
+    document.addEventListener('fullscreenchange', () => {
+      if (document.fullscreenElement) {
+        fullscreenBtn.style.display = 'none';
+      }
     });
   </script>
 </body>
