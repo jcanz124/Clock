@@ -10,13 +10,12 @@
       background-color: black;
       color: white;
       font-family: "Times New Roman", Times, serif;
-      height: 100svh;
+      height: 100vh;
       display: flex;
-      justify-content: flex-end;
-      align-items: flex-start; /* 👈 changed to top-align */
-      padding: 5vh 5vw 2vh 2vw; /* 👈 top padding added */
+      justify-content: flex-end; /* 👈 Pushes content to RIGHT side */
+      align-items: center;
+      padding-right: 5vw; /* 👈 Add some space from right edge */
       box-sizing: border-box;
-      overflow: hidden;
     }
 
     .content {
@@ -24,7 +23,7 @@
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      width: 100%;
+      max-width: 90vw;
     }
 
     img {
@@ -35,24 +34,21 @@
     }
 
     #time {
-      font-size: clamp(3rem, 10vh, 12vw); /* ✅ prevent shrinking */
+      font-size: 10vw; /* 👈 Responsive big size */
       font-weight: bold;
-      line-height: 1;
-      min-height: 1em;
     }
 
     #date {
-      font-size: clamp(1.5rem, 4vh, 5vw);
+      font-size: 4vw;
       margin-top: 0.5em;
       color: #ccc;
       text-transform: uppercase;
-      min-height: 1em;
     }
 
     #fullscreenBtn {
       margin-top: 2em;
       padding: 0.8em 2em;
-      font-size: 1.2rem;
+      font-size: 1.5vw;
       cursor: pointer;
       background-color: #444;
       color: white;
@@ -103,7 +99,6 @@
     setInterval(updateTimeAndDate, 1000);
     updateTimeAndDate();
 
-    // Wake lock
     let wakeLock = null;
     async function requestWakeLock() {
       try {
@@ -120,9 +115,12 @@
       }
     }
 
+    setInterval(() => {
+      document.body.style.display = 'none';
+      document.body.style.display = 'block';
+    }, 30000);
     requestWakeLock();
 
-    // Fullscreen logic
     const fullscreenBtn = document.getElementById('fullscreenBtn');
     fullscreenBtn.addEventListener('click', () => {
       const elem = document.documentElement;
