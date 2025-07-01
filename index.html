@@ -12,34 +12,34 @@
       font-family: "Times New Roman", Times, serif;
       height: 100vh;
       display: flex;
-      justify-content: flex-start; /* 👈 Stays on the LEFT */
+      justify-content: flex-end; /* 👈 Pushes content to RIGHT side */
       align-items: center;
-    }
-
-    .right-half {
-      width: 50vw;
-      padding-right: 2rem;
-      text-align: right;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start; /* 👈 Align content inside to LEFT */
+      padding-right: 5vw; /* 👈 Add some space from right edge */
       box-sizing: border-box;
     }
 
+    .content {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      max-width: 90vw;
+    }
+
     img {
-      width: 100%;        /* 👈 Fit inside the 50vw */
-      max-width: 700px;   /* 👈 Limit image size */
+      width: 100%;
+      max-width: 500px;
       height: auto;
       margin-bottom: 1em;
     }
 
     #time {
-      font-size: 8em;
+      font-size: 10vw; /* 👈 Responsive big size */
       font-weight: bold;
     }
 
     #date {
-      font-size: 3.5em;
+      font-size: 4vw;
       margin-top: 0.5em;
       color: #ccc;
       text-transform: uppercase;
@@ -47,8 +47,8 @@
 
     #fullscreenBtn {
       margin-top: 2em;
-      padding: 0.5em 1.5em;
-      font-size: 1em;
+      padding: 0.8em 2em;
+      font-size: 1.5vw;
       cursor: pointer;
       background-color: #444;
       color: white;
@@ -64,7 +64,7 @@
 </head>
 <body>
 
-  <div class="left-half">
+  <div class="content">
     <img src="logo/logo.png" alt="Your Logo" id="topImage">
     <div id="time"></div>
     <div id="date"></div>
