@@ -10,11 +10,11 @@
       background-color: black;
       color: white;
       font-family: "Times New Roman", Times, serif;
-      height: 100svh; /* ✅ Use small viewport height to prevent jump */
+      height: 100svh;
       display: flex;
-      justify-content: flex-end; /* ✅ Align content to right */
-      align-items: center;
-      padding-right: 5vw;
+      justify-content: flex-end;
+      align-items: flex-start; /* 👈 changed to top-align */
+      padding: 5vh 5vw 2vh 2vw; /* 👈 top padding added */
       box-sizing: border-box;
       overflow: hidden;
     }
@@ -24,7 +24,7 @@
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      max-width: 90vw;
+      width: 100%;
     }
 
     img {
@@ -35,23 +35,24 @@
     }
 
     #time {
-      font-size: 10vw;
+      font-size: clamp(3rem, 10vh, 12vw); /* ✅ prevent shrinking */
       font-weight: bold;
-      min-height: 1em; /* ✅ Prevent layout jump */
+      line-height: 1;
+      min-height: 1em;
     }
 
     #date {
-      font-size: 4vw;
+      font-size: clamp(1.5rem, 4vh, 5vw);
       margin-top: 0.5em;
       color: #ccc;
       text-transform: uppercase;
-      min-height: 1em; /* ✅ Prevent layout jump */
+      min-height: 1em;
     }
 
     #fullscreenBtn {
       margin-top: 2em;
       padding: 0.8em 2em;
-      font-size: 1.5vw;
+      font-size: 1.2rem;
       cursor: pointer;
       background-color: #444;
       color: white;
@@ -102,7 +103,7 @@
     setInterval(updateTimeAndDate, 1000);
     updateTimeAndDate();
 
-    // ✅ Wake lock only (no flicker workaround)
+    // Wake lock
     let wakeLock = null;
     async function requestWakeLock() {
       try {
