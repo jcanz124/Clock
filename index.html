@@ -10,12 +10,13 @@
       background-color: black;
       color: white;
       font-family: "Times New Roman", Times, serif;
-      height: 100vh;
+      height: 100svh; /* ✅ Use small viewport height to prevent jump */
       display: flex;
-      justify-content: flex-end; /* 👈 Pushes content to RIGHT side */
+      justify-content: flex-end; /* ✅ Align content to right */
       align-items: center;
-      padding-right: 5vw; /* 👈 Add some space from right edge */
+      padding-right: 5vw;
       box-sizing: border-box;
+      overflow: hidden;
     }
 
     .content {
@@ -34,8 +35,9 @@
     }
 
     #time {
-      font-size: 10vw; /* 👈 Responsive big size */
+      font-size: 10vw;
       font-weight: bold;
+      min-height: 1em; /* ✅ Prevent layout jump */
     }
 
     #date {
@@ -43,6 +45,7 @@
       margin-top: 0.5em;
       color: #ccc;
       text-transform: uppercase;
+      min-height: 1em; /* ✅ Prevent layout jump */
     }
 
     #fullscreenBtn {
@@ -99,6 +102,7 @@
     setInterval(updateTimeAndDate, 1000);
     updateTimeAndDate();
 
+    // ✅ Wake lock only (no flicker workaround)
     let wakeLock = null;
     async function requestWakeLock() {
       try {
@@ -115,12 +119,9 @@
       }
     }
 
-    setInterval(() => {
-      document.body.style.display = 'none';
-      document.body.style.display = 'block';
-    }, 30000);
     requestWakeLock();
 
+    // Fullscreen logic
     const fullscreenBtn = document.getElementById('fullscreenBtn');
     fullscreenBtn.addEventListener('click', () => {
       const elem = document.documentElement;
